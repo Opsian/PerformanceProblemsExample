@@ -58,7 +58,7 @@ public class IntegrationTest {
 
     @Test
     public void testPostPerson() throws Exception {
-        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard");
+        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard", 10);
         final Person newPerson = postPerson(person);
         assertThat(newPerson.getId()).isNotNull();
         assertThat(newPerson.getFullName()).isEqualTo(person.getFullName());
@@ -75,8 +75,9 @@ public class IntegrationTest {
         testRenderingPerson("view_mustache");
     }
 
-    private void testRenderingPerson(String viewName) throws Exception {
-        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard");
+    private void testRenderingPerson(String viewName)
+    {
+        final Person person = new Person("Dr. IntegrationTest", "Chief Wizard", 10);
         final Person newPerson = postPerson(person);
         final String url = "http://localhost:" + RULE.getLocalPort() + "/people/" + newPerson.getId() + "/" + viewName;
         Response response = RULE.client().target(url).request().get();

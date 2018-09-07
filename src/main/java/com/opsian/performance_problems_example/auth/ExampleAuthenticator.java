@@ -12,13 +12,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class ExampleAuthenticator implements Authenticator<BasicCredentials, User> {
+public class ExampleAuthenticator implements Authenticator<BasicCredentials, User>
+{
     /**
      * Valid users with mapping user -> roles
      */
     private static final Map<String, Set<String>> VALID_USERS;
 
-    static {
+    static
+    {
         final Map<String, Set<String>> validUsers = new HashMap<>();
         validUsers.put("guest", Collections.emptySet());
         validUsers.put("good-guy", Collections.singleton("BASIC_GUY"));
@@ -27,8 +29,10 @@ public class ExampleAuthenticator implements Authenticator<BasicCredentials, Use
     }
 
     @Override
-    public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-        if (VALID_USERS.containsKey(credentials.getUsername()) && "secret".equals(credentials.getPassword())) {
+    public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException
+    {
+        if (VALID_USERS.containsKey(credentials.getUsername()) && "secret".equals(credentials.getPassword()))
+        {
             return Optional.of(new User(credentials.getUsername(), VALID_USERS.get(credentials.getUsername())));
         }
         return Optional.empty();

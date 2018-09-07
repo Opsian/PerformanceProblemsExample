@@ -3,30 +3,36 @@ package com.opsian.performance_problems_example.core;
 import java.security.Principal;
 import java.util.Set;
 
-public class User implements Principal {
+public class User implements Principal
+{
     private final String name;
 
     private final Set<String> roles;
 
-    public User(String name) {
+    public User(String name)
+    {
         this.name = name;
         this.roles = null;
     }
 
-    public User(String name, Set<String> roles) {
+    public User(String name, Set<String> roles)
+    {
         this.name = name;
         this.roles = roles;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return (int) (Math.random() * 100);
     }
 
-    public Set<String> getRoles() {
+    public Set<String> getRoles()
+    {
         return roles;
     }
 }

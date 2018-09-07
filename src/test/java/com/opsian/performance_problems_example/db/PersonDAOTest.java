@@ -29,7 +29,7 @@ public class PersonDAOTest {
 
     @Test
     public void createPerson() {
-        final Person jeff = daoTestRule.inTransaction(() -> personDAO.create(new Person("Jeff", "The plumber")));
+        final Person jeff = daoTestRule.inTransaction(() -> personDAO.create(new Person("Jeff", "The plumber", 10)));
         assertThat(jeff.getId()).isGreaterThan(0);
         assertThat(jeff.getFullName()).isEqualTo("Jeff");
         assertThat(jeff.getJobTitle()).isEqualTo("The plumber");
@@ -39,19 +39,20 @@ public class PersonDAOTest {
     @Test
     public void findAll() {
         daoTestRule.inTransaction(() -> {
-            personDAO.create(new Person("Jeff", "The plumber"));
-            personDAO.create(new Person("Jim", "The cook"));
-            personDAO.create(new Person("Randy", "The watchman"));
+            personDAO.create(new Person("Jeff", "The plumber", 10));
+            personDAO.create(new Person("Jim", "The cook", 10));
+            personDAO.create(new Person("Randy", "The watchman", 10));
         });
 
         final List<Person> persons = personDAO.findAll();
         assertThat(persons).extracting("fullName").containsOnly("Jeff", "Jim", "Randy");
         assertThat(persons).extracting("jobTitle").containsOnly("The plumber", "The cook", "The watchman");
+        assertThat(persons).extracting("bankBalance").containsOnly(10L);
     }
 
     @Test
     public void handlesNullFullName() {
         assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(()->
-            daoTestRule.inTransaction(() -> personDAO.create(new Person(null, "The null"))));
+            daoTestRule.inTransaction(() -> personDAO.create(new Person(null, "The null", 10))));
     }
 }

@@ -15,6 +15,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="jobTitle" type="varchar(255)"/>
+            <column name="bankBalance" type="bigint"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -1,5 +1,7 @@
 package com.opsian.performance_problems_example.core;
 
+import io.dropwizard.jersey.params.LongParam;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,8 @@ import java.util.Objects;
             query = "SELECT p FROM Person p"
         )
     })
-public class Person {
+public class Person
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -30,56 +33,89 @@ public class Person {
     @Column(name = "jobTitle", nullable = false)
     private String jobTitle;
 
-    public Person() {
+    @Column(name = "bankBalance", nullable = false)
+    private long bankBalance;
+
+
+    public Person()
+    {
     }
 
-    public Person(String fullName, String jobTitle) {
+    public Person(String fullName, String jobTitle, final long bankBalance)
+    {
         this.fullName = fullName;
         this.jobTitle = jobTitle;
+        this.bankBalance = bankBalance;
     }
 
-    public long getId() {
+    public long getId()
+    {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(long id)
+    {
         this.id = id;
     }
 
-    public String getFullName() {
+    public String getFullName()
+    {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(String fullName)
+    {
         this.fullName = fullName;
     }
 
-    public String getJobTitle() {
+    public String getJobTitle()
+    {
         return jobTitle;
     }
 
-    public void setJobTitle(String jobTitle) {
+    public void setJobTitle(String jobTitle)
+    {
         this.jobTitle = jobTitle;
     }
 
+    public long getBankBalance()
+    {
+        return bankBalance;
+    }
+
+    public void withdraw(final long amount)
+    {
+        bankBalance -= amount;
+    }
+
+    public void deposit(final long amount)
+    {
+        bankBalance += amount;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
             return true;
         }
-        if (!(o instanceof Person)) {
+        if (!(o instanceof Person))
+        {
             return false;
         }
 
         final Person that = (Person) o;
 
         return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.fullName, that.fullName) &&
-                Objects.equals(this.jobTitle, that.jobTitle);
+            Objects.equals(this.fullName, that.fullName) &&
+            Objects.equals(this.jobTitle, that.jobTitle) &&
+            this.bankBalance == that.bankBalance;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Objects.hash(id, fullName, jobTitle);
     }
 }

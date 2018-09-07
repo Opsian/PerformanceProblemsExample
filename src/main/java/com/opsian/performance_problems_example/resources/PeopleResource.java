@@ -13,24 +13,21 @@ import java.util.List;
 
 @Path("/people")
 @Produces(MediaType.APPLICATION_JSON)
-public class PeopleResource {
+public class PeopleResource
+{
 
     private final PersonDAO peopleDAO;
 
-    public PeopleResource(PersonDAO peopleDAO) {
+    public PeopleResource(PersonDAO peopleDAO)
+    {
         this.peopleDAO = peopleDAO;
     }
 
     @POST
     @UnitOfWork
-    public Person createPerson(Person person) {
+    public Person createPerson(Person person)
+    {
         return peopleDAO.create(person);
-    }
-
-    @GET
-    @UnitOfWork
-    public List<Person> listPeople() {
-        return peopleDAO.findAll();
     }
 
 }

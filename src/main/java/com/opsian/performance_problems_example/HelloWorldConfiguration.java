@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
 
-public class HelloWorldConfiguration extends Configuration {
+public class HelloWorldConfiguration extends Configuration
+{
     @NotEmpty
     private String template;
 
@@ -26,46 +27,55 @@ public class HelloWorldConfiguration extends Configuration {
     private Map<String, Map<String, String>> viewRendererConfiguration = Collections.emptyMap();
 
     @JsonProperty
-    public String getTemplate() {
+    public String getTemplate()
+    {
         return template;
     }
 
     @JsonProperty
-    public void setTemplate(String template) {
+    public void setTemplate(String template)
+    {
         this.template = template;
     }
 
     @JsonProperty
-    public String getDefaultName() {
+    public String getDefaultName()
+    {
         return defaultName;
     }
 
     @JsonProperty
-    public void setDefaultName(String defaultName) {
+    public void setDefaultName(String defaultName)
+    {
         this.defaultName = defaultName;
     }
 
-    public Template buildTemplate() {
+    public Template buildTemplate()
+    {
         return new Template(template, defaultName);
     }
 
     @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
+    public DataSourceFactory getDataSourceFactory()
+    {
         return database;
     }
 
     @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
+    public void setDataSourceFactory(DataSourceFactory dataSourceFactory)
+    {
         this.database = dataSourceFactory;
     }
 
     @JsonProperty("viewRendererConfiguration")
-    public Map<String, Map<String, String>> getViewRendererConfiguration() {
+    public Map<String, Map<String, String>> getViewRendererConfiguration()
+    {
         return viewRendererConfiguration;
     }
 
     @JsonProperty("viewRendererConfiguration")
-    public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration) {
+    public void setViewRendererConfiguration(Map<String, Map<String, String>> viewRendererConfiguration)
+    {
         this.viewRendererConfiguration = viewRendererConfiguration;
     }
 }

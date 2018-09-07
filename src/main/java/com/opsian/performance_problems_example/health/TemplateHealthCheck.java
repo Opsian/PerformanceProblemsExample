@@ -5,15 +5,18 @@ import com.opsian.performance_problems_example.core.Template;
 
 import java.util.Optional;
 
-public class TemplateHealthCheck extends HealthCheck {
+public class TemplateHealthCheck extends HealthCheck
+{
     private final Template template;
 
-    public TemplateHealthCheck(Template template) {
+    public TemplateHealthCheck(Template template)
+    {
         this.template = template;
     }
 
     @Override
-    protected Result check() throws Exception {
+    protected Result check() throws Exception
+    {
         template.render(Optional.of("woo"));
         template.render(Optional.empty());
         return Result.healthy();

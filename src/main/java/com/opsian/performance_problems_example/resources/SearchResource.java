@@ -14,13 +14,15 @@ import static java.util.Comparator.comparing;
 
 @Path("/search")
 @Produces(MediaType.APPLICATION_JSON)
-public class SearchResource {
+public class SearchResource
+{
 
     private final LevenshteinDistance distance = LevenshteinDistance.getDefaultInstance();
 
     private final PersonDAO peopleDAO;
 
-    public SearchResource(PersonDAO peopleDAO) {
+    public SearchResource(PersonDAO peopleDAO)
+    {
         this.peopleDAO = peopleDAO;
     }
 
@@ -28,7 +30,8 @@ public class SearchResource {
     @GET
     @Path("/contains/{query}")
     @UnitOfWork
-    public List<Person> contains(@PathParam("query") String query) {
+    public List<Person> contains(@PathParam("query") String query)
+    {
         // All entirely bottlenecked on findAll() according to profiler, switch to SQL query?
         return peopleDAO.findAll()
             .stream()
@@ -39,7 +42,8 @@ public class SearchResource {
     @GET
     @Path("/similarity/{query}")
     @UnitOfWork
-    public List<Person> similarity(@PathParam("query") String query) {
+    public List<Person> similarity(@PathParam("query") String query)
+    {
         return peopleDAO.findAll()
             .stream()
             .sorted(comparing(person -> distance.apply(person.getFullName().toLowerCase(), query.toLowerCase())))
@@ -50,7 +54,8 @@ public class SearchResource {
     @GET
     @Path("/fast_similarity/{query}")
     @UnitOfWork
-    public List<Person> fastSimilarity(@PathParam("query") String query) {
+    public List<Person> fastSimilarity(@PathParam("query") String query)
+    {
         final String lowerCaseQuery = query.toLowerCase();
         return peopleDAO.findAll()
             .stream()
@@ -64,21 +69,25 @@ public class SearchResource {
             .collect(Collectors.toList());
     }
 
-    private static final class CachedDistance implements Comparable<CachedDistance> {
+    private static final class CachedDistance implements Comparable<CachedDistance>
+    {
         private final Person person;
         private final int distance;
 
-        private CachedDistance(Person person, int distance) {
+        private CachedDistance(Person person, int distance)
+        {
             this.person = person;
             this.distance = distance;
         }
 
-        public Person getPerson() {
+        public Person getPerson()
+        {
             return person;
         }
 
         @Override
-        public int compareTo(CachedDistance other) {
+        public int compareTo(CachedDistance other)
+        {
             return Integer.compare(distance, other.distance);
         }
     }
