@@ -43,20 +43,11 @@ public class PersonResourceTest {
 
     @Test
     public void getPersonSuccess() {
-        when(DAO.findById(1L)).thenReturn(Optional.of(person));
+        when(DAO.findSafelyById(1L)).thenReturn(person);
 
         Person found = RULE.target("/people/1").request().get(Person.class);
 
         assertThat(found.getId()).isEqualTo(person.getId());
-        verify(DAO).findById(1L);
-    }
-
-    @Test
-    public void getPersonNotFound() {
-        when(DAO.findById(2L)).thenReturn(Optional.empty());
-        final Response response = RULE.target("/people/2").request().get();
-
-        assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
-        verify(DAO).findById(2L);
+        verify(DAO).findSafelyById(1L);
     }
 }

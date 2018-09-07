@@ -30,4 +30,10 @@ public class PeopleResource
         return peopleDAO.create(person);
     }
 
+    @GET
+    @UnitOfWork
+    public List<Person> list() {
+        return peopleDAO.findAll();
+    }
+
 }

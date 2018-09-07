@@ -3,6 +3,7 @@ package com.opsian.performance_problems_example;
 import com.opsian.performance_problems_example.auth.ExampleAuthenticator;
 import com.opsian.performance_problems_example.auth.ExampleAuthorizer;
 import com.opsian.performance_problems_example.cli.RenderCommand;
+import com.opsian.performance_problems_example.core.Bank;
 import com.opsian.performance_problems_example.core.Person;
 import com.opsian.performance_problems_example.core.Template;
 import com.opsian.performance_problems_example.core.User;
@@ -25,6 +26,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.hibernate.SessionFactory;
 
 import java.util.Map;
 
@@ -86,8 +88,10 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration>
     @Override
     public void run(HelloWorldConfiguration configuration, Environment environment)
     {
-        final PersonDAO dao = new PersonDAO(hibernateBundle.getSessionFactory());
+        final SessionFactory sessionFactory = hibernateBundle.getSessionFactory();
+        final PersonDAO dao = new PersonDAO(sessionFactory);
         final Template template = configuration.buildTemplate();
+        final Bank bank = new Bank(dao, sessionFactory);
 
         environment.healthChecks().register("template", new TemplateHealthCheck(template));
         environment.admin().addTask(new EchoTask());
@@ -106,5 +110,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration>
         environment.jersey().register(new PersonResource(dao));
         environment.jersey().register(new FilteredResource());
         environment.jersey().register(new SearchResource(dao));
+        environment.jersey().register(new BankResource(bank));
     }
 }
