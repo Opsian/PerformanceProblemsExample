@@ -82,12 +82,13 @@ public class Bank
         final Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(
             "update Person f set f.bankBalance = f.bankBalance - :amount " +
-                "where f.id = :fromId and f.bankBalance > :amount")
+                "where f.id = :fromId and f.bankBalance >= :amount")
             .setParameter("amount", amount)
             .setParameter("fromId", fromPersonId);
 
-        if (query.executeUpdate() > 0)
+        if (query.executeUpdate() != 1)
         {
+            System.out.println("failed to remove");
             return false;
         }
 
@@ -96,6 +97,6 @@ public class Bank
             .setParameter("amount", amount)
             .setParameter("toId", toPersonId);
 
-        return query.executeUpdate() > 0;
+        return query.executeUpdate() == 1;
     }
 }

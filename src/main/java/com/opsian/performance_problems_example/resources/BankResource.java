@@ -43,4 +43,15 @@ public class BankResource
         return bank.userLockingTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
     }
 
+    @Path("/user_locking_transfer/{fromPersonId}/{toPersonId}/{amount}")
+    @POST
+    @UnitOfWork
+    public boolean userLockingTransferMoney(
+        @PathParam("fromPersonId") LongParam fromPersonId,
+        @PathParam("toPersonId") LongParam toPersonId,
+        @PathParam("amount") LongParam amount)
+    {
+        return bank.userLockingTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
+    }
+
 }

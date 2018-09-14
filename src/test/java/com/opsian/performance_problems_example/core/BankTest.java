@@ -41,7 +41,6 @@ public class BankTest
     }
 
     // Does not work atm.
-    @Ignore
     @Test
     public void shouldFastTransferMoney()
     {
@@ -56,19 +55,15 @@ public class BankTest
 
     private void genericTransferMoney(final TransferMoney transferMoney)
     {
-        final Session session = sessionFactory.getCurrentSession();
         final long fromPersonId = fromPerson.getId();
         final long toPersonId = toPerson.getId();
 
         daoTestRule.inTransaction(() ->
-        {
-            assertTrue(transferMoney.transferMoney(fromPersonId, toPersonId, 100));
-        });
+            assertTrue(transferMoney.transferMoney(fromPersonId, toPersonId, 100)));
 
-        final Person person1 = personDAO.findSafelyById(fromPersonId);
-        session.refresh(person1);
-        final Person person2 = personDAO.findSafelyById(toPersonId);
-        session.refresh(person2);
+        Session session2 = sessionFactory.openSession();
+        final Person person1 = session2.get(Person.class, fromPersonId);
+        final Person person2 = session2.get(Person.class, toPersonId);
 
         assertEquals(0, person1.getBankBalance());
         assertEquals(100, person2.getBankBalance());
