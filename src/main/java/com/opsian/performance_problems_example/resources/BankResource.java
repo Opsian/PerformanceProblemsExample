@@ -1,14 +1,14 @@
 package com.opsian.performance_problems_example.resources;
 
 import com.opsian.performance_problems_example.core.Bank;
-import com.opsian.performance_problems_example.core.Person;
-import com.opsian.performance_problems_example.db.PersonDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path("/bank/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +40,7 @@ public class BankResource
         @PathParam("toPersonId") LongParam toPersonId,
         @PathParam("amount") LongParam amount)
     {
-        return bank.fastTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
+        return bank.userLockingTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
     }
 
 }

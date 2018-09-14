@@ -6,9 +6,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class Bank
 {
     private static final Object TRANSFER_LOCK = new Object();
+
+    private static final Map<Long, Object> personIdToLock = new ConcurrentHashMap<>();
 
     private final PersonDAO personDAO;
     private final SessionFactory sessionFactory;
@@ -35,42 +40,62 @@ public class Bank
             fromPerson.withdraw(amount);
             toPerson.deposit(amount);
 
-            personDAO.persist(fromPerson);
-            personDAO.persist(toPerson);
-
             return true;
         }
+    }
+
+    public boolean userLockingTransferMoney(
+        final long fromPersonId, final long toPersonId, final long amount)
+    {
+        final Person fromPerson = personDAO.findSafelyById(fromPersonId);
+        final Person toPerson = personDAO.findSafelyById(toPersonId);
+
+        final Object fromLock = getLock(fromPersonId);
+        final Object toLock = getLock(toPersonId);
+
+        synchronized (fromLock)
+        {
+            if (fromPerson.getBankBalance() < amount)
+            {
+                return false;
+            }
+
+            fromPerson.withdraw(amount);
+        }
+
+        synchronized (toLock)
+        {
+            toPerson.deposit(amount);
+        }
+
+        return true;
+    }
+
+    private Object getLock(final long personId)
+    {
+        return personIdToLock.computeIfAbsent(personId, id -> new Object());
     }
 
     public boolean fastTransferMoney(
         final long fromPersonId, final long toPersonId, final long amount)
     {
-        try (final Session session = sessionFactory.getCurrentSession())
+        final Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(
+            "update Person f set f.bankBalance = f.bankBalance - :amount " +
+                "where f.id = :fromId and f.bankBalance > :amount")
+            .setParameter("amount", amount)
+            .setParameter("fromId", fromPersonId);
+
+        if (query.executeUpdate() > 0)
         {
-            final Transaction transaction = session.beginTransaction();
-            try {
-                Query query = session.createQuery(
-                    "update Person f set f.bankBalance = f.bankBalance - :amount " +
-                        "where f.id = :fromId and f.bankBalance > :amount")
-                    .setParameter("amount", amount)
-                    .setParameter("fromId", fromPersonId);
-
-                if (query.executeUpdate() == 0)
-                {
-                    return false;
-                }
-
-                query = session.createQuery(
-                    "update Person t set t.bankBalance = t.bankBalance + :amount: where t.id = :toId")
-                    .setParameter("amount", amount)
-                    .setParameter("toId", toPersonId);
-
-                return query.executeUpdate() > 0;
-            }
-            finally
-            {
-                transaction.commit();
-            }
+            return false;
         }
+
+        query = session.createQuery(
+            "update Person t set t.bankBalance = t.bankBalance + :amount where t.id = :toId")
+            .setParameter("amount", amount)
+            .setParameter("toId", toPersonId);
+
+        return query.executeUpdate() > 0;
     }
 }
