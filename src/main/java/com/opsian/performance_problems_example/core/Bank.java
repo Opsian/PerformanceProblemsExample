@@ -1,9 +1,9 @@
 package com.opsian.performance_problems_example.core;
 
 import com.opsian.performance_problems_example.db.PersonDAO;
+import com.opsian.performance_problems_example.legacy_bank_service.LegacyBankProxy;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.Map;
@@ -17,11 +17,13 @@ public class Bank
 
     private final PersonDAO personDAO;
     private final SessionFactory sessionFactory;
+    private final LegacyBankProxy legacyBankProxy;
 
     public Bank(final PersonDAO personDAO, final SessionFactory sessionFactory)
     {
         this.personDAO = personDAO;
         this.sessionFactory = sessionFactory;
+        legacyBankProxy = new LegacyBankProxy();
     }
 
     public boolean contendedTransferMoney(
@@ -98,5 +100,12 @@ public class Bank
             .setParameter("toId", toPersonId);
 
         return query.executeUpdate() == 1;
+    }
+
+    public void mergeBalanceFromLegacyBankAccount(final long personId)
+    {
+        final Person person = personDAO.findSafelyById(personId);
+        final int bankBalance = legacyBankProxy.getBankBalance(personId);
+        person.deposit(bankBalance);
     }
 }

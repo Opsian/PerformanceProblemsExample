@@ -1,11 +1,11 @@
 package com.opsian.performance_problems_example.core;
 
 import com.opsian.performance_problems_example.db.PersonDAO;
+import com.opsian.performance_problems_example.legacy_bank_service.LegacyBankService;
 import io.dropwizard.testing.junit.DAOTestRule;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -40,7 +40,6 @@ public class BankTest
         genericTransferMoney(bank::contendedTransferMoney);
     }
 
-    // Does not work atm.
     @Test
     public void shouldFastTransferMoney()
     {
@@ -72,5 +71,25 @@ public class BankTest
     interface TransferMoney
     {
         boolean transferMoney(final long fromPersonId, final long toPersonId, final long amount);
+    }
+
+    @Test
+    public void shouldMergeAccounts()
+    {
+        final Person person = this.fromPerson;
+        final long personId = person.getId();
+
+        final LegacyBankService service = new LegacyBankService();
+        service.start();
+        try
+        {
+            bank.mergeBalanceFromLegacyBankAccount(personId);
+
+            assertEquals(600, person.getBankBalance());
+        }
+        finally
+        {
+            service.stop();
+        }
     }
 }

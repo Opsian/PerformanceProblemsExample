@@ -54,4 +54,12 @@ public class BankResource
         return bank.userLockingTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
     }
 
+    @Path("/merge_accounts/{personId}/")
+    @POST
+    @UnitOfWork
+    public void mergeAccounts(@PathParam("personId") LongParam personId)
+    {
+        bank.mergeBalanceFromLegacyBankAccount(personId.get());
+    }
+
 }
