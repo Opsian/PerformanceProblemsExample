@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar target/dropwizard-example-1.4.0-SNAPSHOT.jar db migrate example.yml
+java -jar target/performance-problems-example-1.3.5.jar db migrate example.yml

@@ -6,3 +6,4 @@ dist*
 debug.log
 start-*.sh
 dependency-reduced-pom.xml
+rw-start.sh

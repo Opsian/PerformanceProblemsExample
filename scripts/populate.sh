@@ -1,9 +1,8 @@
 #!/bin/sh
 
-#wget http://www2.census.gov/topics/genealogy/1990surnames/dist.all.last
-#wget http://www2.census.gov/topics/genealogy/1990surnames/dist.female.first
-#wget http://www2.census.gov/topics/genealogy/1990surnames/dist.male.first
-
+wget -nc http://www2.census.gov/topics/genealogy/1990surnames/dist.all.last
+wget -nc http://www2.census.gov/topics/genealogy/1990surnames/dist.female.first
+wget -nc http://www2.census.gov/topics/genealogy/1990surnames/dist.male.first
 
 importNames () {
     head -n 100 "$1" | cut -f 1 -d ' ' | while read firstName

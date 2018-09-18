@@ -12,6 +12,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LegacyBankService
 {
+    private static final int RANDOM_DELAY = -1;
+    private static final long delay;
+
+    static
+    {
+        final String requestDelay = System.getenv("REQUEST_DELAY");
+        delay = requestDelay != null ? Integer.parseInt(requestDelay) : RANDOM_DELAY;
+        System.out.printf("Delay = %d%n", delay);
+    }
+
     public static void main(String[] args)
     {
         LegacyBankService service = new LegacyBankService();
@@ -26,6 +36,8 @@ public class LegacyBankService
         server = new Server(7082);
     }
 
+
+
     public void start()
     {
         final SizedThreadPool threadPool = (SizedThreadPool) server.getThreadPool();
@@ -33,7 +45,7 @@ public class LegacyBankService
         threadPool.setMaxThreads(12);
 
         final ServletHandler servletHandler = new ServletHandler();
-        servletHandler.addServletWithMapping(SlowServlet.class, "/");
+        servletHandler.addServletWithMapping(LegacyBankServlet.class, "/");
 
         server.setHandler(servletHandler);
 
@@ -72,14 +84,18 @@ public class LegacyBankService
         }
     }
 
-    public static class SlowServlet extends HttpServlet
+    public static class LegacyBankServlet extends HttpServlet
     {
         @Override
         protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException
         {
             try
             {
-                Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
+                final long delay = LegacyBankService.delay == RANDOM_DELAY ?
+                    ThreadLocalRandom.current().nextInt(300, 1000) :
+                    LegacyBankService.delay;
+
+                Thread.sleep(delay);
             }
             catch (InterruptedException e)
             {
