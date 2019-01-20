@@ -9,6 +9,6 @@ OPSIAN_AGENT=$3
 # mvn package -DskipTests
 
 java \
--agentpath:"${OPSIAN_AGENT}apiKey=$KEY,debugLogPath=debug.log,agentId=$NAME" \
+-agentpath:"${OPSIAN_AGENT}=apiKey=$KEY,debugLogPath=debug.log,agentId=$NAME" \
 -jar target/performance-problems-example-1.3.5.jar server example.yml
 
