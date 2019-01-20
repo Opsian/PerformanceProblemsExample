@@ -9,7 +9,7 @@ importNames () {
     do
         head -n 100 dist.all.last | cut -f 1 -d ' ' | while read lastName
         do
-            curl -H "Content-Type: application/json" -X POST -d "{\"fullName\":\"$firstName $lastName\",\"jobTitle\":\"Job Title\"}" "http://localhost:7080/people"
+            curl -s -H "Content-Type: application/json" -X POST -d "{\"fullName\":\"$firstName $lastName\",\"jobTitle\":\"Job Title\"}" "http://localhost:7080/people"
         done
     done
 }
