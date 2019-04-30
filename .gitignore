@@ -7,3 +7,5 @@ debug.log
 start-*.sh
 dependency-reduced-pom.xml
 rw-start.sh
+pp-monthly-update-new-version.csv
+
