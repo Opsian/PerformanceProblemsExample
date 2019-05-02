@@ -8,6 +8,8 @@ OPSIAN_AGENT=$3
 
 # mvn package -DskipTests
 
+# TODO: add application version to make it easier to demo / diff
+
 java \
 -Xmx1024M \
 -agentpath:"${OPSIAN_AGENT}=apiKey=$KEY,debugLogPath=debug.log,agentId=$NAME" \

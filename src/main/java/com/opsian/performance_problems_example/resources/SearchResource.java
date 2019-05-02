@@ -32,7 +32,6 @@ public class SearchResource
     @UnitOfWork
     public List<Person> contains(@PathParam("query") String query)
     {
-        // All entirely bottlenecked on findAll() according to profiler, switch to SQL query?
         return peopleDAO.findAll()
             .stream()
             .filter(person -> person.getFullName().toLowerCase().contains(query.toLowerCase()))

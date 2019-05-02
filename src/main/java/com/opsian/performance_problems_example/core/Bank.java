@@ -6,9 +6,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Singleton
 public class Bank
 {
     private static final Object TRANSFER_LOCK = new Object();
@@ -52,6 +54,7 @@ public class Bank
         final Person fromPerson = personDAO.findSafelyById(fromPersonId);
         final Person toPerson = personDAO.findSafelyById(toPersonId);
 
+        // TODO: sort the locks and hold both.
         final Object fromLock = getLock(fromPersonId);
         final Object toLock = getLock(toPersonId);
 

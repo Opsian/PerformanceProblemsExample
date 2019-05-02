@@ -40,7 +40,7 @@ public class BankResource
         @PathParam("toPersonId") LongParam toPersonId,
         @PathParam("amount") LongParam amount)
     {
-        return bank.userLockingTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
+        return bank.fastTransferMoney(fromPersonId.get(), toPersonId.get(), amount.get());
     }
 
     @Path("/user_locking_transfer/{fromPersonId}/{toPersonId}/{amount}")
