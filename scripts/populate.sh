@@ -17,4 +17,4 @@ importNames () {
 importNames 'dist.female.first'
 importNames 'dist.male.first'
 
-wget http://prod1.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-monthly-update-new-version.csv
+wget -nc http://prod1.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-monthly-update-new-version.csv
