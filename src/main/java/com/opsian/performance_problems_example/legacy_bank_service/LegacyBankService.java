@@ -13,17 +13,20 @@ import java.util.concurrent.ThreadLocalRandom;
 public class LegacyBankService
 {
     private static final int RANDOM_DELAY = -1;
-    private static final long delay;
-
-    static
-    {
-        final String requestDelay = System.getenv("REQUEST_DELAY");
-        delay = requestDelay != null ? Integer.parseInt(requestDelay) : RANDOM_DELAY;
-        System.out.printf("Delay = %d%n", delay);
-    }
+    private static long delay;
 
     public static void main(String[] args)
     {
+        if (args.length == 1)
+        {
+            delay = Integer.parseInt(args[0]);
+        }
+        else
+        {
+            delay = RANDOM_DELAY;
+        }
+        System.out.printf("Delay = %d%n", delay);
+
         LegacyBankService service = new LegacyBankService();
         service.start();
         service.join();
@@ -35,8 +38,6 @@ public class LegacyBankService
     {
         server = new Server(7082);
     }
-
-
 
     public void start()
     {
