@@ -1,7 +1,6 @@
 package com.opsian.performance_problems_example.resources;
 
 import com.opsian.performance_problems_example.houses_before.HouseSale;
-import com.opsian.performance_problems_example.houses_before.SalesData;
 import com.opsian.performance_problems_example.houses_before.SalesQuery;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -23,8 +22,8 @@ public class HouseResource
     @GET
     @Path("/contains/{query}")
     @UnitOfWork
-    public List<HouseSale> contains(@PathParam("query") String queryStr)
+    public List<HouseSale> salesSearch(@PathParam("query") String queryStr)
     {
-        return salesQuery.query(queryStr);
+        return salesQuery.search(queryStr);
     }
 }

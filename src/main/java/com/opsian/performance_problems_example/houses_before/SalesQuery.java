@@ -9,22 +9,20 @@ public class SalesQuery
 {
     public static void main(String[] args)
     {
-        final List<HouseSale> sales = new SalesQuery().query("london");
+        final List<HouseSale> sales = new SalesQuery().search("london");
         sales.forEach(System.out::println);
     }
 
-    public List<HouseSale> query(final String queryStr)
+    public List<HouseSale> search(final String queryStr)
     {
-        return SalesData.getSales()
+        return SalesData.getSalesData()
             .stream()
             .filter(sale ->
-                {
-                    return containsIgnoreCase(sale.getCounty(), queryStr) ||
-                        containsIgnoreCase(sale.getDistrict(), queryStr) ||
-                        containsIgnoreCase(sale.getLocality(), queryStr) ||
-                        containsIgnoreCase(sale.getPrimaryAddressableObjectName(), queryStr) ||
-                        containsIgnoreCase(sale.getSecondaryAddressableObjectName(), queryStr);
-                })
+                containsIgnoreCase(sale.getCounty(), queryStr) ||
+                containsIgnoreCase(sale.getDistrict(), queryStr) ||
+                containsIgnoreCase(sale.getLocality(), queryStr) ||
+                containsIgnoreCase(sale.getPrimaryAddressableObjectName(), queryStr) ||
+                containsIgnoreCase(sale.getSecondaryAddressableObjectName(), queryStr))
             .sorted(Comparator.comparing(HouseSale::getPrice))
             .collect(toList());
     }
