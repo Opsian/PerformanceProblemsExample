@@ -5,6 +5,8 @@ import com.opsian.performance_problems_example.legacy_bank_service.LegacyBankPro
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.util.Map;
@@ -13,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class Bank
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Bank.class);
+
     private static final Object TRANSFER_LOCK = new Object();
 
     private static final Map<Long, Object> personIdToLock = new ConcurrentHashMap<>();
@@ -93,7 +97,7 @@ public class Bank
 
         if (query.executeUpdate() != 1)
         {
-            System.out.println("failed to remove");
+            LOGGER.error("failed to remove for a fastTransferMoney between {} and {}", fromPersonId, toPersonId);
             return false;
         }
 
@@ -107,8 +111,12 @@ public class Bank
 
     public void mergeBalanceFromLegacyBankAccount(final long personId)
     {
-        final Person person = personDAO.findSafelyById(personId);
-        final int bankBalance = legacyBankProxy.getBankBalance(personId);
-        person.deposit(bankBalance);
+        synchronized (TRANSFER_LOCK)
+        {
+            final int bankBalance = legacyBankProxy.getBankBalance(personId);
+            final Person person = personDAO.findSafelyById(personId);
+            person.deposit(bankBalance);
+            personDAO.persist(person);
+        }
     }
 }
