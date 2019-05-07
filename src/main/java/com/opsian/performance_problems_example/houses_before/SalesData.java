@@ -17,24 +17,16 @@ public class SalesData
         sales.forEach(System.out::println);
     }
 
-    private static List<HouseSale> sales = null;
-
-    // TODO: break this
-    public synchronized static List<HouseSale> getSales()
+    public static List<HouseSale> getSales()
     {
-        if (sales == null)
+        try
         {
-            try
-            {
-                // sales = readSales();
-                return readSales();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            return readSales();
         }
-        return sales;
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private static List<HouseSale> readSales() throws IOException

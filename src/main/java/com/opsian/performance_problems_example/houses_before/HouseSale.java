@@ -35,7 +35,6 @@ public class HouseSale
     private final String townOrCity;
     private final String district;
     private final String county;
-
     public HouseSale(
         final long price,
         final LocalDate date,

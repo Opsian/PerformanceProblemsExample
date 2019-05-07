@@ -111,5 +111,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration>
         environment.jersey().register(new FilteredResource());
         environment.jersey().register(new SearchResource(dao));
         environment.jersey().register(new BankResource(bank));
+        environment.jersey().register(new HouseResource());
     }
 }

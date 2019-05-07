@@ -31,7 +31,6 @@ public class SalesQuery
 
     private boolean containsIgnoreCase(final String field, final String queryStr)
     {
-        // StringUtils.containsIgnoreCase()
         return field.toUpperCase().contains(queryStr.toUpperCase());
     }
 }
