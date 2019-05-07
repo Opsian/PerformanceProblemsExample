@@ -3,7 +3,7 @@
 target
 logs
 dist*
-debug.log
+opsian-debug.log
 start-*.sh
 dependency-reduced-pom.xml
 *-start.sh
