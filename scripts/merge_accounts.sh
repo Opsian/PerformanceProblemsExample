@@ -2,5 +2,5 @@
 
 set -eu
 
-seq 1 10 | parallel 'ab -n 10 -p empty http://localhost:7080/bank/merge_accounts/{}/'
+seq 1 4 | parallel 'ab -n 8 -p empty http://localhost:7080/bank/merge_accounts/{}/' | grep 'Time taken' | tail -n 1
 
