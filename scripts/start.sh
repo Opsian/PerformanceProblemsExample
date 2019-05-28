@@ -6,7 +6,7 @@ KEY=$1
 NAME=$2
 OPSIAN_AGENT=$3
 
-# mvn package -DskipTests
+mvn package -DskipTests
 
 # TODO: add application version to make it easier to demo / diff
 
