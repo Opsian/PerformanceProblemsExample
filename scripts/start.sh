@@ -8,10 +8,8 @@ OPSIAN_AGENT=$3
 
 mvn package -DskipTests
 
-# TODO: add application version to make it easier to demo / diff
-
 java \
 -Xmx1024M \
--agentpath:"${OPSIAN_AGENT}apiKey=$KEY,debugLogPath=opsian-debug.log,agentId=$NAME" \
+-agentpath:"${OPSIAN_AGENT}apiKey=$KEY,debugLogPath=opsian-debug.log,agentId=$NAME,applicationVersion=$NAME" \
 -jar target/performance-problems-example-1.3.5.jar server example.yml
 
